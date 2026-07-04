@@ -98,6 +98,7 @@ import {
   ArrowLeft01Icon,
   ArrowRight01Icon,
   ArrowRightDoubleIcon,
+  ArrowUpDownIcon,
   ChartUpIcon,
 } from "@hugeicons/core-free-icons"
 
@@ -161,7 +162,17 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     accessorKey: "name",
-    header: "Product",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center gap-1"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Product
+          <HugeiconsIcon size={14} icon={ArrowUpDownIcon} strokeWidth={2} />
+        </button>
+      )
+    },
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-3">
@@ -176,27 +187,58 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         </div>
       )
     },
-    // enableHiding: false,
+    enableHiding: false,
+    enableSorting: true,
   },
   {
     accessorKey: "price",
-    header: "Price",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center gap-1"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Price
+          <HugeiconsIcon size={14} icon={ArrowUpDownIcon} strokeWidth={2} />
+        </button>
+      )
+    },
     cell: ({ row }) => {
       return <p>${row.original.price}</p>
     },
-    // enableHiding: false,
+    enableSorting: true,
   },
   {
     accessorKey: "category",
-    header: "Category",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center gap-1"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Category
+          <HugeiconsIcon size={14} icon={ArrowUpDownIcon} strokeWidth={2} />
+        </button>
+      )
+    },
     cell: ({ row }) => {
       return <p className="capitalize">{row.original.category}</p>
     },
-    // enableHiding: false,
+    enableSorting: true,
   },
   {
     accessorKey: "stock",
-    header: "Stock",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center gap-1"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Stock
+          <HugeiconsIcon size={14} icon={ArrowUpDownIcon} strokeWidth={2} />
+        </button>
+      )
+    },
     cell: ({ row }) => {
       const { status, className } = getStockInfo(row.original.stock)
 

@@ -12,7 +12,7 @@
   {
     "id": 2,
     "name": "Poul Cadovius Sofa",
-    "price": 100,
+    "price": 200,
     "category": "sofas",
     "stock": 0,
     "sku": "SOF-123",
@@ -22,7 +22,7 @@
   {
     "id": 3,
     "name": "POUL CADOVIUS SOFA",
-    "price": 100,
+    "price": 300,
     "category": "sofas",
     "stock": 3,
     "sku": "SOF-123",
