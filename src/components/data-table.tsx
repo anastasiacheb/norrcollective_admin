@@ -442,7 +442,7 @@ export function DataTable({
                   strokeWidth={2}
                   data-icon="inline-start"
                 />
-                <span className="hidden xl:inline">Add Columns</span>
+                <span className="hidden xl:inline">Columns</span>
 
                 <HugeiconsIcon
                   icon={ArrowDown01Icon}
@@ -557,7 +557,7 @@ export function DataTable({
                 </SelectTrigger>
                 <SelectContent side="top">
                   <SelectGroup>
-                    {[8, 20, 30, 40, 50].map((pageSize) => (
+                    {[10, 20, 30, 40, 50].map((pageSize) => (
                       <SelectItem key={pageSize} value={`${pageSize}`}>
                         {pageSize}
                       </SelectItem>
