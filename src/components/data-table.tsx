@@ -176,15 +176,13 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-120 items-center gap-3 text-sm font-medium wrap-break-word capitalize">
           <img
             className="aspect-square size-15 rounded-lg"
             src={`/images/${row.original.src[0]}`}
             alt={row.original.name}
           />
-          <span className="text-sm font-medium capitalize">
-            {row.original.name}
-          </span>
+          {row.original.name}
         </div>
       )
     },
@@ -211,6 +209,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     accessorKey: "category",
+    filterFn: "equalsString",
     header: ({ column }) => {
       return (
         <button
@@ -223,7 +222,9 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       )
     },
     cell: ({ row }) => {
-      return <p className="capitalize">{row.original.category}</p>
+      return (
+        <p className="capitalize">{row.original.category.replace("-", " ")}</p>
+      )
     },
     enableSorting: true,
   },
@@ -264,6 +265,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     id: "actions",
+    size: 40,
     cell: () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -301,7 +303,10 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
       className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
     >
       {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id}>
+        <TableCell
+          key={cell.id}
+          className={cell.column.id === "actions" ? "w-10" : ""}
+        >
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
       ))}
@@ -379,43 +384,55 @@ export function DataTable({
       onValueChange={handleCategoryChange}
       className="w-full flex-col justify-start gap-6"
     >
-      <div className="flex items-center justify-between px-4 lg:px-6">
-        <Label htmlFor="view-selector" className="sr-only">
-          View
-        </Label>
-        <Select value={category} onValueChange={handleCategoryChange}>
-          <SelectTrigger
-            className="flex w-fit @4xl/main:hidden"
-            size="sm"
-            id="view-selector"
-          >
-            <SelectValue placeholder="Select a view" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="sofas">Sofas</SelectItem>
-              <SelectItem value="easy-chairs">Easy Chairs</SelectItem>
-              <SelectItem value="chairs">Chairs</SelectItem>
-              <SelectItem value="storage">Storage</SelectItem>
-              <SelectItem value="tables">Tables</SelectItem>
-              <SelectItem value="light">Light</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        <TabsList className="hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1 @4xl/main:flex">
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="sofas">
-            Sofas <Badge variant="secondary">3</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="easy-chairs">
-            Easy Chairs <Badge variant="secondary">2</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="chairs">Chairs</TabsTrigger>
-          <TabsTrigger value="storage">Storage</TabsTrigger>
-          <TabsTrigger value="tables">Tables</TabsTrigger>
-          <TabsTrigger value="light">Light</TabsTrigger>
-        </TabsList>
+      <div className="flex items-center justify-between gap-2 px-4 lg:px-6">
+        <div className="flex items-center gap-2">
+          <Input
+            placeholder="Search products..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-64 min-w-40"
+          />
+          <Label htmlFor="view-selector" className="sr-only">
+            View
+          </Label>
+          <Select value={category} onValueChange={handleCategoryChange}>
+            <SelectTrigger
+              className="flex w-fit @4xl/main:hidden"
+              size="sm"
+              id="view-selector"
+            >
+              <SelectValue placeholder="Select a view" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="sofas">Sofas</SelectItem>
+                <SelectItem value="easy-chairs">Easy Chairs</SelectItem>
+                <SelectItem value="chairs">Chairs</SelectItem>
+                <SelectItem value="storage">Storage</SelectItem>
+                <SelectItem value="tables">Tables</SelectItem>
+                <SelectItem value="light">Light</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <TabsList className="hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1 @4xl/main:flex">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="sofas">
+              Sofas
+              {/* <Badge variant="secondary">3</Badge> */}
+            </TabsTrigger>
+            <TabsTrigger value="easy-chairs">
+              Easy Chairs
+              {/* <Badge variant="secondary">2</Badge> */}
+            </TabsTrigger>
+            <TabsTrigger value="chairs">Chairs</TabsTrigger>
+            <TabsTrigger value="storage">Storage</TabsTrigger>
+            <TabsTrigger value="tables">Tables</TabsTrigger>
+            <TabsTrigger value="light">Light</TabsTrigger>
+          </TabsList>
+        </div>
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -425,11 +442,13 @@ export function DataTable({
                   strokeWidth={2}
                   data-icon="inline-start"
                 />
-                Columns
+                <span className="hidden xl:inline">Add Columns</span>
+
                 <HugeiconsIcon
                   icon={ArrowDown01Icon}
                   strokeWidth={2}
                   data-icon="inline-end"
+                  className="hidden xl:inline"
                 />
               </Button>
             </DropdownMenuTrigger>
@@ -459,7 +478,7 @@ export function DataTable({
           </DropdownMenu>
           <Button variant="outline" size="sm">
             <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
-            <span className="hidden lg:inline">Add Section</span>
+            <span className="hidden xl:inline">Add Product</span>
           </Button>
         </div>
       </div>
@@ -538,7 +557,7 @@ export function DataTable({
                 </SelectTrigger>
                 <SelectContent side="top">
                   <SelectGroup>
-                    {[10, 20, 30, 40, 50].map((pageSize) => (
+                    {[8, 20, 30, 40, 50].map((pageSize) => (
                       <SelectItem key={pageSize} value={`${pageSize}`}>
                         {pageSize}
                       </SelectItem>
