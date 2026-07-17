@@ -278,8 +278,8 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
           <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
+          {/* <DropdownMenuItem></DropdownMenuItem> */}
+          {/* <DropdownMenuItem>Favorite</DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
         </DropdownMenuContent>
@@ -333,6 +333,16 @@ export function DataTable({
     useSensor(KeyboardSensor, {})
   )
 
+  const [category, setCategory] = React.useState<string>("all")
+
+  const handleCategoryChange = (value: string) => {
+    setCategory(value)
+
+    table
+      .getColumn("category")
+      ?.setFilterValue(value === "all" ? undefined : value)
+  }
+
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => data?.map(({ id }) => id) || [],
     [data]
@@ -365,26 +375,15 @@ export function DataTable({
 
   return (
     <Tabs
-      defaultValue="all"
-      onValueChange={(value) => {
-        table
-          .getColumn("category")
-          ?.setFilterValue(value === "all" ? undefined : value)
-      }}
+      value={category}
+      onValueChange={handleCategoryChange}
       className="w-full flex-col justify-start gap-6"
     >
       <div className="flex items-center justify-between px-4 lg:px-6">
         <Label htmlFor="view-selector" className="sr-only">
           View
         </Label>
-        <Select
-          defaultValue="all"
-          onValueChange={(value) => {
-            table
-              .getColumn("category")
-              ?.setFilterValue(value === "all" ? undefined : value)
-          }}
-        >
+        <Select value={category} onValueChange={handleCategoryChange}>
           <SelectTrigger
             className="flex w-fit @4xl/main:hidden"
             size="sm"
