@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 import { DataTable } from "@/components/data-table"
-import { Pattern } from "@/components/table"
+// import { Pattern } from "@/components/table"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
 
@@ -32,7 +32,7 @@ export default function App() {
                 <ChartAreaInteractive />
               </div> */}
               <DataTable data={data} />
-              <Pattern />
+              {/* <Pattern /> */}
             </div>
           </div>
         </div>
