@@ -134,7 +134,9 @@ const getStockInfo = (stock: number) => {
   }
 }
 
-const columns: ColumnDef<z.infer<typeof schema>>[] = [
+const columns = (
+  handleDelete: (id: number) => void
+): ColumnDef<z.infer<typeof schema>>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -266,7 +268,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     id: "actions",
     size: 40,
-    cell: () => (
+    cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -283,7 +285,14 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           {/* <DropdownMenuItem></DropdownMenuItem> */}
           {/* <DropdownMenuItem>Favorite</DropdownMenuItem> */}
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+          <DropdownMenuItem
+            variant="destructive"
+            onSelect={() => {
+              handleDelete(row.original.id)
+            }}
+          >
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),
@@ -329,7 +338,7 @@ export function DataTable({
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 8,
   })
   const sortableId = React.useId()
   const sensors = useSensors(
@@ -353,9 +362,15 @@ export function DataTable({
     [data]
   )
 
+  const handleDelete = (id: number) => {
+    console.log(window.scrollY)
+    setData((prev) => prev.filter((item) => item.id !== id))
+  }
+
   const table = useReactTable({
     data,
-    columns,
+    columns: columns(handleDelete),
+    autoResetPageIndex: false,
     state: {
       sorting,
       columnVisibility,
@@ -557,7 +572,7 @@ export function DataTable({
                 </SelectTrigger>
                 <SelectContent side="top">
                   <SelectGroup>
-                    {[10, 20, 30, 40, 50].map((pageSize) => (
+                    {[8, 20, 30, 40, 50].map((pageSize) => (
                       <SelectItem key={pageSize} value={`${pageSize}`}>
                         {pageSize}
                       </SelectItem>
