@@ -1,6 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
+// import { DataTable } from "@/components/data-table"
 import EditProduct from "@/components/edit-product"
 // import { Pattern } from "@/components/table"
 import { SectionCards } from "@/components/section-cards"
@@ -32,7 +32,7 @@ export default function App() {
               <div className="px-4 lg:px-6">
                 <ChartAreaInteractive />
               </div> */}
-              <DataTable data={data} />
+              {/* <DataTable data={data} /> */}
               <EditProduct />
               {/* <Pattern /> */}
             </div>
