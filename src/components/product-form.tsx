@@ -80,27 +80,6 @@ import {
   Upload01Icon,
 } from "@hugeicons/core-free-icons"
 
-const images = [
-  {
-    name: "workspace.png",
-    meta: "PNG · 820 KB",
-    src: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=900&auto=format&fit=crop&q=80",
-    alt: "Workspace",
-  },
-  {
-    name: "desk-reference.jpg",
-    meta: "JPG · 1.1 MB",
-    src: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=900&auto=format&fit=crop&q=80",
-    alt: "Desk",
-  },
-  {
-    name: "office-reference.jpg",
-    meta: "JPG · 940 KB",
-    src: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=900&auto=format&fit=crop&q=80",
-    alt: "Office",
-  },
-]
-
 const formSchema = z.object({
   name: z
     .string()
@@ -116,13 +95,19 @@ const formSchema = z.object({
         "Auto-detection is not allowed. Please select a specific category.",
     }),
 
-  price: z.coerce.number({
-    error: "Required field",
-  }),
+  price: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.number({
+      error: "Required field",
+    })
+  ),
 
-  stock: z.coerce.number({
-    error: "Required field",
-  }),
+  stock: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.number({
+      error: "Required field",
+    })
+  ),
 
   sku: z
     .string()
@@ -142,16 +127,31 @@ const formSchema = z.object({
   //   .max(10, "You can upload up to 10 images."),
 })
 
-export default function EditProduct() {
+type Product = {
+  id: number
+  name: string
+  category: string
+  price: number
+  stock: number
+  sku: string
+  description: string
+  src: string[]
+}
+
+type EditProductProps = {
+  product?: Product
+}
+
+export default function ProductForm({ product }: EditProductProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      category: "",
-      price: undefined,
-      stock: undefined,
-      sku: "",
-      description: "",
+      name: product?.name ?? "",
+      category: product?.category ?? "",
+      price: product?.price,
+      stock: product?.stock,
+      sku: product?.sku ?? "",
+      description: product?.description ?? "",
     },
   })
 
@@ -162,11 +162,21 @@ export default function EditProduct() {
 
   type ImageItem = {
     id: string
-    file: File
+    file?: File
     preview: string
+    name: string
+    size?: number
+    type?: string
   }
 
-  const [images, setImages] = React.useState<ImageItem[]>([])
+  const [images, setImages] = React.useState<ImageItem[]>(
+    () =>
+      product?.src.map((src) => ({
+        id: crypto.randomUUID(),
+        preview: `/images/${src}`,
+        name: src,
+      })) ?? []
+  )
 
   const addImages = (files: FileList | File[]) => {
     const newImages = Array.from(files)
@@ -177,6 +187,9 @@ export default function EditProduct() {
         id: crypto.randomUUID(),
         file,
         preview: URL.createObjectURL(file),
+        name: file.name,
+        size: file.size,
+        type: file.type,
       }))
 
     setImages((prev) => [...prev, ...newImages].slice(0, 10))
@@ -186,13 +199,13 @@ export default function EditProduct() {
     <div className="flex flex-col gap-6 px-4 lg:mx-auto lg:max-w-7xl lg:px-6">
       <div className="flex flex-col gap-4 md:flex-row md:justify-between">
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon-lg">
+          <Button variant="outline" size="icon-lg" className="bg-background">
             <HugeiconsIcon size={14} icon={ArrowLeft02Icon} strokeWidth={2} />
           </Button>
-          <h2>Add product</h2>
+          <h2>{product ? "Edit product" : "Add product"}</h2>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="lg">
+          <Button variant="outline" size="lg" className="bg-background">
             Discard
           </Button>
           <Button type="submit" form="product-form" size="lg">
@@ -206,7 +219,8 @@ export default function EditProduct() {
           <CardHeader>
             <CardTitle>Product information</CardTitle>
             <CardDescription>
-              Set a description to the product for better visibility.
+              Manage the essential details, pricing, stock, and category for
+              this product.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -365,7 +379,7 @@ export default function EditProduct() {
                       aria-invalid={fieldState.invalid}
                       id={field.name}
                       placeholder="Type your message here."
-                      className="min-h-30"
+                      className="min-h-70 lg:min-h-50"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -379,7 +393,9 @@ export default function EditProduct() {
         <Card>
           <CardHeader>
             <CardTitle>Product images</CardTitle>
-            <CardDescription>Upload a maximum of 10 files.</CardDescription>
+            <CardDescription>
+              Upload and manage up to 10 product images.
+            </CardDescription>
             {images.length > 0 && images.length < 10 && (
               <CardAction>
                 <Button variant="outline" size="sm">
@@ -461,23 +477,25 @@ export default function EditProduct() {
                 {images.map((image) => (
                   <Attachment key={image.id} orientation="vertical">
                     <AttachmentMedia variant="image">
-                      <img src={image.preview} alt={image.file.name} />
+                      <img src={image.preview} alt={image.name} />
                     </AttachmentMedia>
                     <AttachmentContent>
-                      <AttachmentTitle>{image.file.name}</AttachmentTitle>
-                      <AttachmentDescription>
-                        {`${image.file.type} · ${Math.round(image.file.size / 1024)} KB`}
-                      </AttachmentDescription>
+                      <AttachmentTitle>{image.name}</AttachmentTitle>
+                      {/* <AttachmentDescription>
+                        {`${image.type ?? ""} · ${image.size ? Math.round(image.size / 1024) : ""} KB`}
+                      </AttachmentDescription> */}
                     </AttachmentContent>
                     <AttachmentActions>
                       <AttachmentAction
                         onClick={() => {
-                          URL.revokeObjectURL(image.preview)
+                          if (image.file) {
+                            URL.revokeObjectURL(image.preview)
+                          }
                           setImages((prev) =>
                             prev.filter((item) => item.id !== image.id)
                           )
                         }}
-                        aria-label={`Remove ${image.file.name}`}
+                        aria-label={`Remove ${image.name}`}
                       >
                         <HugeiconsIcon
                           size={14}

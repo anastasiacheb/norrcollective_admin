@@ -59,6 +59,15 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -394,242 +403,245 @@ export function DataTable({
   })
 
   return (
-    <Tabs
-      value={category}
-      onValueChange={handleCategoryChange}
-      className="w-full flex-col justify-start gap-6"
-    >
-      <div className="flex items-center justify-between gap-2 px-4 lg:px-6">
-        <div className="flex items-center gap-2">
-          <Input
-            placeholder="Search products..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="max-w-64 min-w-40"
-          />
-          <Label htmlFor="view-selector" className="sr-only">
-            View
-          </Label>
-          <Select value={category} onValueChange={handleCategoryChange}>
-            <SelectTrigger
-              className="flex w-fit @4xl/main:hidden"
-              size="sm"
-              id="view-selector"
-            >
-              <SelectValue placeholder="Select a view" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="sofas">Sofas</SelectItem>
-                <SelectItem value="easy-chairs">Easy Chairs</SelectItem>
-                <SelectItem value="chairs">Chairs</SelectItem>
-                <SelectItem value="storage">Storage</SelectItem>
-                <SelectItem value="tables">Tables</SelectItem>
-                <SelectItem value="light">Light</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <TabsList className="hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1 @4xl/main:flex">
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="sofas">
-              Sofas
-              {/* <Badge variant="secondary">3</Badge> */}
-            </TabsTrigger>
-            <TabsTrigger value="easy-chairs">
-              Easy Chairs
-              {/* <Badge variant="secondary">2</Badge> */}
-            </TabsTrigger>
-            <TabsTrigger value="chairs">Chairs</TabsTrigger>
-            <TabsTrigger value="storage">Storage</TabsTrigger>
-            <TabsTrigger value="tables">Tables</TabsTrigger>
-            <TabsTrigger value="light">Light</TabsTrigger>
-          </TabsList>
-        </div>
-        <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <HugeiconsIcon
-                  icon={LeftToRightListBulletIcon}
-                  strokeWidth={2}
-                  data-icon="inline-start"
-                />
-                <span className="hidden xl:inline">Columns</span>
-
-                <HugeiconsIcon
-                  icon={ArrowDown01Icon}
-                  strokeWidth={2}
-                  data-icon="inline-end"
-                  className="hidden xl:inline"
-                />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-32">
-              {table
-                .getAllColumns()
-                .filter(
-                  (column) =>
-                    typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide()
-                )
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button variant="outline" size="sm">
-            <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
-            <span className="hidden xl:inline">Add Product</span>
-          </Button>
-        </div>
-      </div>
-      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
-        <div className="overflow-hidden rounded-2xl border">
-          <DndContext
-            collisionDetection={closestCenter}
-            modifiers={[restrictToVerticalAxis]}
-            // onDragEnd={handleDragEnd}
-            sensors={sensors}
-            id={sortableId}
-          >
-            <Table>
-              <TableHeader className="sticky top-0 z-10 bg-muted">
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id} colSpan={header.colSpan}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      )
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody className="**:data-[slot=table-cell]:first:w-8">
-                {table.getRowModel().rows?.length ? (
-                  <SortableContext
-                    items={table.getRowModel().rows.map((row) => row.id)}
-                    strategy={verticalListSortingStrategy}
-                  >
-                    {table.getRowModel().rows.map((row) => (
-                      <DraggableRow key={row.original.id} row={row} />
-                    ))}
-                  </SortableContext>
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </DndContext>
-        </div>
-        <div className="flex items-center justify-between px-4">
-          <div className="hidden flex-1 text-sm text-muted-foreground lg:flex">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-          <div className="flex w-full items-center gap-8 lg:w-fit">
-            <div className="hidden items-center gap-2 lg:flex">
-              <Label htmlFor="rows-per-page" className="text-sm font-medium">
-                Rows per page
-              </Label>
-              <Select
-                value={`${table.getState().pagination.pageSize}`}
-                onValueChange={(value) => {
-                  table.setPageSize(Number(value))
-                }}
+    <Card className="mx-4 lg:mx-6">
+      <Tabs
+        value={category}
+        onValueChange={handleCategoryChange}
+        className="w-full flex-col justify-start gap-6"
+      >
+        <div className="flex items-center justify-between gap-2 px-4 lg:px-6">
+          <div className="flex items-center gap-2">
+            <Input
+              placeholder="Search products..."
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("name")?.setFilterValue(event.target.value)
+              }
+              className="max-w-64 min-w-40"
+            />
+            <Label htmlFor="view-selector" className="sr-only">
+              View
+            </Label>
+            <Select value={category} onValueChange={handleCategoryChange}>
+              <SelectTrigger
+                className="flex w-fit @4xl/main:hidden"
+                size="sm"
+                id="view-selector"
               >
-                <SelectTrigger size="sm" className="w-20" id="rows-per-page">
-                  <SelectValue
-                    placeholder={table.getState().pagination.pageSize}
+                <SelectValue placeholder="Select a view" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="sofas">Sofas</SelectItem>
+                  <SelectItem value="easy-chairs">Easy Chairs</SelectItem>
+                  <SelectItem value="chairs">Chairs</SelectItem>
+                  <SelectItem value="storage">Storage</SelectItem>
+                  <SelectItem value="tables">Tables</SelectItem>
+                  <SelectItem value="light">Light</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <TabsList className="hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1 @4xl/main:flex">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="sofas">
+                Sofas
+                {/* <Badge variant="secondary">3</Badge> */}
+              </TabsTrigger>
+              <TabsTrigger value="easy-chairs">
+                Easy Chairs
+                {/* <Badge variant="secondary">2</Badge> */}
+              </TabsTrigger>
+              <TabsTrigger value="chairs">Chairs</TabsTrigger>
+              <TabsTrigger value="storage">Storage</TabsTrigger>
+              <TabsTrigger value="tables">Tables</TabsTrigger>
+              <TabsTrigger value="light">Light</TabsTrigger>
+            </TabsList>
+          </div>
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <HugeiconsIcon
+                    icon={LeftToRightListBulletIcon}
+                    strokeWidth={2}
+                    data-icon="inline-start"
                   />
-                </SelectTrigger>
-                <SelectContent side="top">
-                  <SelectGroup>
-                    {[8, 20, 30, 40, 50].map((pageSize) => (
-                      <SelectItem key={pageSize} value={`${pageSize}`}>
-                        {pageSize}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+                  <span className="hidden xl:inline">Columns</span>
+
+                  <HugeiconsIcon
+                    icon={ArrowDown01Icon}
+                    strokeWidth={2}
+                    data-icon="inline-end"
+                    className="hidden xl:inline"
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-32">
+                {table
+                  .getAllColumns()
+                  .filter(
+                    (column) =>
+                      typeof column.accessorFn !== "undefined" &&
+                      column.getCanHide()
+                  )
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    )
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button variant="outline" size="sm">
+              <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
+              <span className="hidden xl:inline">Add Product</span>
+            </Button>
+          </div>
+        </div>
+        <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+          <div className="overflow-hidden rounded-2xl border">
+            <DndContext
+              collisionDetection={closestCenter}
+              modifiers={[restrictToVerticalAxis]}
+              // onDragEnd={handleDragEnd}
+              sensors={sensors}
+              id={sortableId}
+            >
+              <Table>
+                <TableHeader className="sticky top-0 z-10 bg-muted">
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => {
+                        return (
+                          <TableHead key={header.id} colSpan={header.colSpan}>
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </TableHead>
+                        )
+                      })}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody className="**:data-[slot=table-cell]:first:w-8">
+                  {table.getRowModel().rows?.length ? (
+                    <SortableContext
+                      items={table.getRowModel().rows.map((row) => row.id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      {table.getRowModel().rows.map((row) => (
+                        <DraggableRow key={row.original.id} row={row} />
+                      ))}
+                    </SortableContext>
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center"
+                      >
+                        No results.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </DndContext>
+          </div>
+          <div className="flex items-center justify-between px-4">
+            <div className="hidden flex-1 text-sm text-muted-foreground lg:flex">
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} row(s) selected.
             </div>
-            <div className="flex w-fit items-center justify-center text-sm font-medium">
-              Page {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
-            </div>
-            <div className="ml-auto flex items-center gap-2 lg:ml-0">
-              <Button
-                variant="outline"
-                className="hidden h-8 w-8 p-0 lg:flex"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <span className="sr-only">Go to first page</span>
-                <HugeiconsIcon icon={ArrowLeftDoubleIcon} strokeWidth={2} />
-              </Button>
-              <Button
-                variant="outline"
-                className="size-8"
-                size="icon"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                <span className="sr-only">Go to previous page</span>
-                <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} />
-              </Button>
-              <Button
-                variant="outline"
-                className="size-8"
-                size="icon"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                <span className="sr-only">Go to next page</span>
-                <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-              </Button>
-              <Button
-                variant="outline"
-                className="hidden size-8 lg:flex"
-                size="icon"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                disabled={!table.getCanNextPage()}
-              >
-                <span className="sr-only">Go to last page</span>
-                <HugeiconsIcon icon={ArrowRightDoubleIcon} strokeWidth={2} />
-              </Button>
+            <div className="flex w-full items-center gap-8 lg:w-fit">
+              <div className="hidden items-center gap-2 lg:flex">
+                <Label htmlFor="rows-per-page" className="text-sm font-medium">
+                  Rows per page
+                </Label>
+                <Select
+                  value={`${table.getState().pagination.pageSize}`}
+                  onValueChange={(value) => {
+                    table.setPageSize(Number(value))
+                  }}
+                >
+                  <SelectTrigger size="sm" className="w-20" id="rows-per-page">
+                    <SelectValue
+                      placeholder={table.getState().pagination.pageSize}
+                    />
+                  </SelectTrigger>
+                  <SelectContent side="top">
+                    <SelectGroup>
+                      {[8, 20, 30, 40, 50].map((pageSize) => (
+                        <SelectItem key={pageSize} value={`${pageSize}`}>
+                          {pageSize}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex w-fit items-center justify-center text-sm font-medium">
+                Page {table.getState().pagination.pageIndex + 1} of{" "}
+                {table.getPageCount()}
+              </div>
+              <div className="ml-auto flex items-center gap-2 lg:ml-0">
+                <Button
+                  variant="outline"
+                  className="hidden h-8 w-8 p-0 lg:flex"
+                  onClick={() => table.setPageIndex(0)}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <span className="sr-only">Go to first page</span>
+                  <HugeiconsIcon icon={ArrowLeftDoubleIcon} strokeWidth={2} />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="size-8"
+                  size="icon"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <span className="sr-only">Go to previous page</span>
+                  <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="size-8"
+                  size="icon"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  <span className="sr-only">Go to next page</span>
+                  <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="hidden size-8 lg:flex"
+                  size="icon"
+                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                  disabled={!table.getCanNextPage()}
+                >
+                  <span className="sr-only">Go to last page</span>
+                  <HugeiconsIcon icon={ArrowRightDoubleIcon} strokeWidth={2} />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {/* <TabsContent value="sofas" className="flex flex-col px-4 lg:px-6">
+        {/* <TabsContent value="sofas" className="flex flex-col px-4 lg:px-6">
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
       </TabsContent>
       <TabsContent value="easy-chairs" className="flex flex-col px-4 lg:px-6">
@@ -647,7 +659,8 @@ export function DataTable({
       <TabsContent value="light" className="flex flex-col px-4 lg:px-6">
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
       </TabsContent> */}
-    </Tabs>
+      </Tabs>
+    </Card>
   )
 }
 
