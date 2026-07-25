@@ -5,6 +5,7 @@ import ProductForm from "@/components/product-form"
 // import { Pattern } from "@/components/table"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
+import { Outlet } from "react-router"
 
 import {
   SidebarInset,
@@ -12,7 +13,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-import data from "./data.json"
+// import data from "./data.json"
 
 const product = {
   id: 20,
@@ -40,12 +41,14 @@ export default function App() {
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 pb-4 md:gap-6 md:pb-6">
+              <Outlet />
               {/* <SectionCards />
               <div className="px-4 lg:px-6">
                 <ChartAreaInteractive /> product={product}
               </div> */}
-              {/* <DataTable data={data} /> */}
-              <ProductForm product={product} />
+              {/* <ProductForm product={product} />
+              <ProductForm />
+              <DataTable data={data} /> */}
               {/* <Pattern /> */}
             </div>
           </div>

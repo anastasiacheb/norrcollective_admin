@@ -80,6 +80,8 @@ import {
   Upload01Icon,
 } from "@hugeicons/core-free-icons"
 
+import { Link } from "react-router"
+
 const formSchema = z.object({
   name: z
     .string()
@@ -200,13 +202,24 @@ export default function ProductForm({ product }: EditProductProps) {
       <div className="flex flex-col gap-4 md:flex-row md:justify-between">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon-lg" className="bg-background">
-            <HugeiconsIcon size={14} icon={ArrowLeft02Icon} strokeWidth={2} />
+            <Link
+              to="/products"
+              className="flex size-full items-center justify-center"
+            >
+              <HugeiconsIcon size={14} icon={ArrowLeft02Icon} strokeWidth={2} />
+            </Link>
           </Button>
+
           <h2>{product ? "Edit product" : "Add product"}</h2>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="lg" className="bg-background">
-            Discard
+          <Button variant="outline" size="lg" className="bg-background px-0">
+            <Link
+              to="/products"
+              className="flex size-full items-center justify-center px-4"
+            >
+              Discard
+            </Link>
           </Button>
           <Button type="submit" form="product-form" size="lg">
             Save

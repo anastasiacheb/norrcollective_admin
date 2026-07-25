@@ -1,10 +1,12 @@
-import { Collapsible } from "@/components/ui/collapsible"
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible"
 import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+
+import { Link } from "react-router"
 
 export function NavMain({
   items,
@@ -31,20 +33,21 @@ export function NavMain({
             defaultOpen={item.isActive}
             className="group/collapsible"
           >
-            <SidebarMenuItem>
-              {/* <CollapsibleTrigger asChild> */}
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon}
-                <span>{item.title}</span>
-                {/* <HugeiconsIcon
+            <Link to={item.url}>
+              <SidebarMenuItem>
+                {/* <CollapsibleTrigger asChild> */}
+                <SidebarMenuButton tooltip={item.title}>
+                  {item.icon}
+                  <span>{item.title}</span>
+                  {/* <HugeiconsIcon
                     icon={ArrowRight01Icon}
                     strokeWidth={2}
                     className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
                   /> */}
-              </SidebarMenuButton>
-              {/* </CollapsibleTrigger> */}
-              {/* <CollapsibleContent> */}
-              {/* <SidebarMenuSub>
+                </SidebarMenuButton>
+                {/* </CollapsibleTrigger> */}
+                {/* <CollapsibleContent> */}
+                {/* <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
@@ -55,8 +58,9 @@ export function NavMain({
                     </SidebarMenuSubItem>
                   ))}
                 </SidebarMenuSub> */}
-              {/* </CollapsibleContent> */}
-            </SidebarMenuItem>
+                {/* </CollapsibleContent> */}
+              </SidebarMenuItem>
+            </Link>
           </Collapsible>
         ))}
       </SidebarMenu>

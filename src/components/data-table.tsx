@@ -38,6 +38,8 @@ import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { Link } from "react-router"
+
 import { useIsMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -290,7 +292,14 @@ const columns = (
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem className="px-0">
+            <Link
+              to={`/products/${row.original.id}`}
+              className="size-full px-3"
+            >
+              Edit
+            </Link>
+          </DropdownMenuItem>
           {/* <DropdownMenuItem></DropdownMenuItem> */}
           {/* <DropdownMenuItem>Favorite</DropdownMenuItem> */}
           <DropdownMenuSeparator />
@@ -372,7 +381,6 @@ export function DataTable({
   )
 
   const handleDelete = (id: number) => {
-    console.log(window.scrollY)
     setData((prev) => prev.filter((item) => item.id !== id))
   }
 
@@ -503,9 +511,14 @@ export function DataTable({
                   })}
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="outline" size="sm">
-              <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
-              <span className="hidden xl:inline">Add Product</span>
+            <Button variant="outline" size="sm" className="px-0">
+              <Link
+                to="/products/add"
+                className="flex size-full w-full items-center gap-2 px-2 xl:px-3"
+              >
+                <HugeiconsIcon icon={Add01Icon} strokeWidth={2} />
+                <span className="hidden xl:inline">Add Product</span>
+              </Link>
             </Button>
           </div>
         </div>

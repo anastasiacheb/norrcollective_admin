@@ -49,18 +49,18 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/",
       icon: <HugeiconsIcon icon={DashboardBrowsingIcon} strokeWidth={2} />,
       isActive: true,
     },
     {
       title: "Products",
-      url: "#",
+      url: "/products",
       icon: <HugeiconsIcon icon={ArmchairIcon} strokeWidth={2} />,
     },
     {
       title: "Orders",
-      url: "#",
+      url: "/orders",
       icon: <HugeiconsIcon icon={Trolley01Icon} strokeWidth={2} />,
     },
   ],
