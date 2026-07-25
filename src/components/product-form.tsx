@@ -2,6 +2,7 @@ import * as React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Controller, useForm } from "react-hook-form"
+import { useNavigate } from "react-router"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -81,6 +82,8 @@ import {
 } from "@hugeicons/core-free-icons"
 
 import { Link } from "react-router"
+import { useRevalidator } from "react-router"
+import { addProduct, updateProduct } from "@/Products"
 
 const formSchema = z.object({
   name: z
@@ -98,14 +101,20 @@ const formSchema = z.object({
     }),
 
   price: z.preprocess(
-    (value) => (value === "" ? undefined : value),
+    (value) => {
+      if (value === "") return undefined
+      return Number(value)
+    },
     z.number({
       error: "Required field",
     })
   ),
 
   stock: z.preprocess(
-    (value) => (value === "" ? undefined : value),
+    (value) => {
+      if (value === "") return undefined
+      return Number(value)
+    },
     z.number({
       error: "Required field",
     })
@@ -145,6 +154,8 @@ type EditProductProps = {
 }
 
 export default function ProductForm({ product }: EditProductProps) {
+  const revalidator = useRevalidator()
+  const navigate = useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -156,11 +167,6 @@ export default function ProductForm({ product }: EditProductProps) {
       description: product?.description ?? "",
     },
   })
-
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    console.log(data)
-  }
 
   type ImageItem = {
     id: string
@@ -179,6 +185,25 @@ export default function ProductForm({ product }: EditProductProps) {
         name: src,
       })) ?? []
   )
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    if (product) {
+      await updateProduct({
+        ...product,
+        ...data,
+        src: images.map((image) => image.name),
+      })
+    } else {
+      await addProduct({
+        ...data,
+        src: images.map((image) => image.name),
+      })
+    }
+
+    revalidator.revalidate()
+
+    navigate("/products")
+  }
 
   const addImages = (files: FileList | File[]) => {
     const newImages = Array.from(files)

@@ -1,4 +1,6 @@
 import * as React from "react"
+import { deleteProduct } from "@/Products.ts"
+import { useRevalidator } from "react-router"
 import { useState } from "react"
 import {
   closestCenter,
@@ -341,12 +343,8 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   )
 }
 
-export function DataTable({
-  data: initialData,
-}: {
-  data: z.infer<typeof schema>[]
-}) {
-  const [data, setData] = React.useState(() => initialData)
+export function DataTable({ data }: { data: z.infer<typeof schema>[] }) {
+  // const [data, setData] = React.useState(() => initialData)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -380,8 +378,15 @@ export function DataTable({
     [data]
   )
 
-  const handleDelete = (id: number) => {
-    setData((prev) => prev.filter((item) => item.id !== id))
+  // const handleDelete = (id: number) => {
+  //   setData((prev) => prev.filter((item) => item.id !== id))
+  // }
+
+  const revalidator = useRevalidator()
+
+  const handleDelete = async (id: number) => {
+    await deleteProduct(id)
+    revalidator.revalidate()
   }
 
   const table = useReactTable({
