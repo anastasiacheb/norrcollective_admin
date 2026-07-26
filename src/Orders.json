@@ -1,0 +1,70 @@
+[
+  {
+    "id": 1001,
+    "orderNumber": "NC-1001",
+    "name": "Emma Johansson",
+    "email": "emma.johansson@example.com",
+    "phone": "+46 70 123 45 67",
+    "orderDate": "2026-06-10",
+    "deliveryDate": "2026-06-15",
+    "deliveryTime": "12:00-16:00",
+    "street": "Birger Jarlsgatan",
+    "apartment": "24",
+    "status": "processing",
+    "products": [
+      {
+        "productId": 20,
+        "quantity": 1
+      },
+      {
+        "productId": 12,
+        "quantity": 2
+      }
+    ],
+    "total": 13000
+  },
+  {
+    "id": 1002,
+    "orderNumber": "NC-1002",
+    "name": "Lucas Martin",
+    "email": "lucas.martin@example.com",
+    "phone": "+33 6 45 78 90 12",
+    "orderDate": "2026-06-08",
+    "deliveryDate": "2026-06-13",
+    "deliveryTime": "08:00-12:00",
+    "street": "Rue de Rivoli",
+    "apartment": "18",
+    "status": "shipped",
+    "products": [
+      {
+        "productId": 8,
+        "quantity": 2
+      }
+    ],
+    "total": 8400
+  },
+  {
+    "id": 1003,
+    "orderNumber": "NC-1003",
+    "name": "Sofia Berg",
+    "email": "sofia.berg@example.com",
+    "phone": "+46 73 987 65 43",
+    "orderDate": "2026-06-12",
+    "deliveryDate": "2026-06-18",
+    "deliveryTime": "16:00-20:00",
+    "street": "Kungsportsavenyen",
+    "apartment": "12",
+    "status": "pending",
+    "products": [
+      {
+        "productId": 5,
+        "quantity": 1
+      },
+      {
+        "productId": 20,
+        "quantity": 1
+      }
+    ],
+    "total": 9800
+  }
+]
