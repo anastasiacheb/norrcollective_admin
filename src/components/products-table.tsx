@@ -1,8 +1,8 @@
 import { useLoaderData } from "react-router"
-import { DataTable } from "@/components/data-table"
+import { DataTable2 } from "@/components/data-table2"
 
 export default function ProductsTable() {
   const { products } = useLoaderData()
   console.log(products)
-  return <DataTable data={products} />
+  return <DataTable2 data={products} />
 }

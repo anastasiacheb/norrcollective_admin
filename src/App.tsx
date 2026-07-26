@@ -1,6 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
+import { DataTable2 } from "@/components/data-table2"
 import ProductForm from "@/components/product-form"
 // import { Pattern } from "@/components/table"
 import { SectionCards } from "@/components/section-cards"
@@ -48,7 +48,7 @@ export default function App() {
               </div> */}
               {/* <ProductForm product={product} />
               <ProductForm />
-              <DataTable data={data} /> */}
+              <DataTable2 data={data} /> */}
               {/* <Pattern /> */}
             </div>
           </div>
