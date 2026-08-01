@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { DataTable } from "./data-table"
+
 import orders from "../orders.json"
 
 import { Button } from "@/components/ui/button"
@@ -160,5 +161,9 @@ function getOrders() {
 export default function OrdersTable() {
   const data = getOrders()
 
-  return <DataTable columns={columns} data={data} />
+  return (
+    <>
+      <DataTable columns={columns} data={data} />
+    </>
+  )
 }
