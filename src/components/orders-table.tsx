@@ -79,11 +79,31 @@ type Order = {
 const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "orderNumber",
-    header: "Order number",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center gap-1"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Order number
+          <HugeiconsIcon size={14} icon={ArrowUpDownIcon} strokeWidth={2} />
+        </button>
+      )
+    },
   },
   {
     accessorKey: "name",
-    header: "Customer",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center gap-1"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Customer
+          <HugeiconsIcon size={14} icon={ArrowUpDownIcon} strokeWidth={2} />
+        </button>
+      )
+    },
     cell: ({ row }) => {
       return (
         <div className="flex w-fit flex-col">
@@ -95,18 +115,48 @@ const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "total",
-    header: "Price",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center gap-1"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Price
+          <HugeiconsIcon size={14} icon={ArrowUpDownIcon} strokeWidth={2} />
+        </button>
+      )
+    },
     cell: ({ row }) => {
       return <p>${row.original.total}</p>
     },
   },
   {
     accessorKey: "orderDate",
-    header: "Date",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center gap-1"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date
+          <HugeiconsIcon size={14} icon={ArrowUpDownIcon} strokeWidth={2} />
+        </button>
+      )
+    },
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => {
+      return (
+        <button
+          className="flex items-center gap-1"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <HugeiconsIcon size={14} icon={ArrowUpDownIcon} strokeWidth={2} />
+        </button>
+      )
+    },
     cell: ({ row }) => {
       const { label, className } = getStatus(row.original.status)
       return <Badge className={className}>{label}</Badge>

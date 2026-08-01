@@ -1,8 +1,11 @@
+import * as React from "react"
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
   getPaginationRowModel,
+  type SortingState,
+  getSortedRowModel,
 } from "@tanstack/react-table"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
@@ -13,23 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-import { Button } from "@/components/ui/button"
-import { HugeiconsIcon } from "@hugeicons/react"
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "@hugeicons/core-free-icons"
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
 import { DataTablePagination } from "./data-table-pagination"
 
@@ -42,11 +28,18 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   })
 
   return (
