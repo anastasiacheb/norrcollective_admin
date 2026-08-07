@@ -23,6 +23,16 @@ import {
 import { DataTablePagination } from "./data-table-pagination"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -66,6 +76,15 @@ export function DataTable<TData, TValue>({
     },
   })
 
+  const [status, setStatus] = React.useState<string>("all")
+
+  const handleStatusChange = (value: string) => {
+    setStatus(value)
+    table
+      .getColumn("status")
+      ?.setFilterValue(value === "all" ? undefined : value)
+  }
+
   return (
     <div>
       <div className="flex items-center py-4">
@@ -79,6 +98,35 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-64 min-w-40"
         />
+        <Tabs
+          value={status}
+          onValueChange={handleStatusChange}
+          className="w-full flex-col justify-start gap-6"
+        >
+          <TabsList className="hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1 @4xl/main:flex">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="pending">Pending</TabsTrigger>
+            <TabsTrigger value="processing">Processing</TabsTrigger>
+            <TabsTrigger value="shipped">Shipped</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <Select value={status} onValueChange={handleStatusChange}>
+          <SelectTrigger
+            className="flex w-fit @4xl/main:hidden"
+            size="sm"
+            id="view-selector"
+          >
+            <SelectValue placeholder="Select a view" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="processing">Processing</SelectItem>
+              <SelectItem value="shipped">Shipped</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
