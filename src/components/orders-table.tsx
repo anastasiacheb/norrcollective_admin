@@ -79,6 +79,9 @@ type Order = {
 const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "orderNumber",
+    meta: {
+      label: "Order number",
+    },
     header: ({ column }) => {
       return (
         <button
@@ -90,9 +93,13 @@ const columns: ColumnDef<Order>[] = [
         </button>
       )
     },
+    enableHiding: false,
   },
   {
     accessorKey: "name",
+    meta: {
+      label: "Customer",
+    },
     header: ({ column }) => {
       return (
         <button
@@ -115,6 +122,9 @@ const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "total",
+    meta: {
+      label: "Price",
+    },
     header: ({ column }) => {
       return (
         <button
@@ -132,6 +142,9 @@ const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "orderDate",
+    meta: {
+      label: "Date",
+    },
     header: ({ column }) => {
       return (
         <button
@@ -146,6 +159,9 @@ const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "status",
+    meta: {
+      label: "Status",
+    },
     header: ({ column }) => {
       return (
         <button
@@ -199,6 +215,7 @@ const columns: ColumnDef<Order>[] = [
         </DropdownMenuContent>
       </DropdownMenu>
     ),
+    enableHiding: false,
   },
 ]
 
