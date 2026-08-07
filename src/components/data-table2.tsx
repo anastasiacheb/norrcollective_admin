@@ -40,7 +40,7 @@ import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { Link } from "react-router"
+import { Link, useSearchParams } from "react-router"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
@@ -125,6 +125,8 @@ export const schema = z.object({
   sku: z.string(),
   src: z.array(z.string()),
 })
+
+import { useLocation } from "react-router"
 
 const getStockInfo = (stock: number) => {
   if (stock === 0) {
@@ -297,6 +299,7 @@ const columns = (
           <DropdownMenuItem className="px-0">
             <Link
               to={`/products/${row.original.id}`}
+              state={{ from: location.pathname + location.search }}
               className="size-full px-3"
             >
               Edit
@@ -352,10 +355,19 @@ export function DataTable2({ data }: { data: z.infer<typeof schema>[] }) {
     []
   )
   const [sorting, setSorting] = React.useState<SortingState>([])
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: 8,
-  })
+  // const [pagination, setPagination] = React.useState({
+  //   pageIndex: 0,
+  //   pageSize: 8,
+  // })
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const search = searchParams.get("search") ?? ""
+
+  const pagination = {
+    pageIndex: Number(searchParams.get("page") ?? 0),
+    pageSize: Number(searchParams.get("size") ?? 8),
+  }
+
   const sortableId = React.useId()
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
@@ -382,6 +394,8 @@ export function DataTable2({ data }: { data: z.infer<typeof schema>[] }) {
   //   setData((prev) => prev.filter((item) => item.id !== id))
   // }
 
+  const location = useLocation()
+
   const revalidator = useRevalidator()
 
   const handleDelete = async (id: number) => {
@@ -392,7 +406,7 @@ export function DataTable2({ data }: { data: z.infer<typeof schema>[] }) {
   const table = useReactTable({
     data,
     columns: columns(handleDelete),
-    autoResetPageIndex: false,
+    autoResetPageIndex: true,
     state: {
       sorting,
       columnVisibility,
@@ -406,7 +420,14 @@ export function DataTable2({ data }: { data: z.infer<typeof schema>[] }) {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: setPagination,
+    onPaginationChange: (updater) => {
+      const next = typeof updater === "function" ? updater(pagination) : updater
+      setSearchParams({
+        ...Object.fromEntries(searchParams),
+        page: String(next.pageIndex),
+        size: String(next.pageSize),
+      })
+    },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

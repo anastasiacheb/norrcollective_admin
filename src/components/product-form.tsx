@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Controller, useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
+import { useLocation } from "react-router"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -156,6 +157,7 @@ type EditProductProps = {
 export default function ProductForm({ product }: EditProductProps) {
   const revalidator = useRevalidator()
   const navigate = useNavigate()
+  const location = useLocation()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -202,7 +204,7 @@ export default function ProductForm({ product }: EditProductProps) {
 
     revalidator.revalidate()
 
-    navigate("/products")
+    navigate(location.state?.from ?? "/products")
   }
 
   const addImages = (files: FileList | File[]) => {
@@ -228,7 +230,7 @@ export default function ProductForm({ product }: EditProductProps) {
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon-lg" className="bg-background">
             <Link
-              to="/products"
+              to={location.state?.from ?? "/products"}
               className="flex size-full items-center justify-center"
             >
               <HugeiconsIcon size={14} icon={ArrowLeft02Icon} strokeWidth={2} />
@@ -240,7 +242,7 @@ export default function ProductForm({ product }: EditProductProps) {
         <div className="flex gap-2">
           <Button variant="outline" size="lg" className="bg-background px-0">
             <Link
-              to="/products"
+              to={location.state?.from ?? "/products"}
               className="flex size-full items-center justify-center px-4"
             >
               Discard
