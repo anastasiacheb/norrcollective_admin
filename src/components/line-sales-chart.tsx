@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import {
@@ -170,13 +170,13 @@ export function LineSalesChart() {
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer config={chartConfig} className="min-h-50 w-full">
+        <ChartContainer config={chartConfig} className="h-60 min-h-50 w-full">
           <AreaChart
             accessibilityLayer
             data={filteredData}
             margin={{
-              left: 12,
-              right: 12,
+              left: 0,
+              right: 20,
             }}
           >
             <CartesianGrid vertical={false} />
@@ -193,6 +193,12 @@ export function LineSalesChart() {
                   day: "numeric",
                 })
               }}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickCount={5}
             />
             <ChartTooltip
               cursor={false}
