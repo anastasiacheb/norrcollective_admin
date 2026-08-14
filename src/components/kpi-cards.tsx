@@ -8,7 +8,10 @@ import {
 } from "@/components/ui/card"
 
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ChartUpIcon, ChartDownIcon } from "@hugeicons/core-free-icons"
+import {
+  ArrowUpRight01Icon,
+  ArrowDownRight01Icon,
+} from "@hugeicons/core-free-icons"
 
 export function KpiCards() {
   return (
@@ -19,8 +22,8 @@ export function KpiCards() {
           <CardAction>
             <Badge variant="outline">
               <HugeiconsIcon
-                icon={ChartUpIcon}
-                strokeWidth={2}
+                icon={ArrowUpRight01Icon}
+                strokeWidth={3}
                 data-icon="inline-start"
               />
               +8.4%
@@ -36,11 +39,7 @@ export function KpiCards() {
           <CardTitle>Orders</CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <HugeiconsIcon
-                icon={ChartUpIcon}
-                strokeWidth={2}
-                data-icon="inline-start"
-              />
+              <HugeiconsIcon icon={ArrowUpRight01Icon} strokeWidth={3} />
               +12.5%
             </Badge>
           </CardAction>
@@ -55,8 +54,8 @@ export function KpiCards() {
           <CardAction>
             <Badge variant="outline">
               <HugeiconsIcon
-                icon={ChartUpIcon}
-                strokeWidth={2}
+                icon={ArrowUpRight01Icon}
+                strokeWidth={3}
                 data-icon="inline-start"
               />
               +4.1%
@@ -73,8 +72,8 @@ export function KpiCards() {
           <CardAction>
             <Badge variant="outline">
               <HugeiconsIcon
-                icon={ChartDownIcon}
-                strokeWidth={2}
+                icon={ArrowDownRight01Icon}
+                strokeWidth={3}
                 data-icon="inline-start"
               />
               -2.8%
