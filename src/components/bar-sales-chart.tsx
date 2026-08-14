@@ -74,7 +74,7 @@ export function BarSalesChart() {
               type="natural"
               fill="var(--primary)"
               fillOpacity={0.6}
-              radius={8}
+              radius={20}
             />
           </BarChart>
         </ChartContainer>

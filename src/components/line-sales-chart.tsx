@@ -233,7 +233,7 @@ export function LineSalesChart() {
               type="natural"
               stroke="var(--primary)"
               fill="url(#fillRevenue)"
-              fillOpacity={0.4}
+              fillOpacity={0.6}
             />
           </AreaChart>
         </ChartContainer>
