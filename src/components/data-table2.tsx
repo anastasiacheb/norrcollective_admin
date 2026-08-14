@@ -365,7 +365,7 @@ export function DataTable2({ data }: { data: z.infer<typeof schema>[] }) {
 
   const pagination = {
     pageIndex: Number(searchParams.get("page") ?? 0),
-    pageSize: Number(searchParams.get("size") ?? 8),
+    pageSize: Number(searchParams.get("size") ?? 7),
   }
 
   const sortableId = React.useId()
@@ -623,7 +623,7 @@ export function DataTable2({ data }: { data: z.infer<typeof schema>[] }) {
                   </SelectTrigger>
                   <SelectContent side="top">
                     <SelectGroup>
-                      {[8, 20, 30, 40, 50].map((pageSize) => (
+                      {[7, 20, 30, 40, 50].map((pageSize) => (
                         <SelectItem key={pageSize} value={`${pageSize}`}>
                           {pageSize}
                         </SelectItem>

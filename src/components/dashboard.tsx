@@ -1,3 +1,9 @@
+import { KpiCards } from "./kpi-cards"
+
 export default function Dashboard() {
-  return <div>dashboard</div>
+  return (
+    <div>
+      <KpiCards />
+    </div>
+  )
 }
