@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Controller, useForm } from "react-hook-form"
 import { useNavigate } from "react-router"
-import { useLocation } from "react-router"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -204,7 +203,7 @@ export default function ProductForm({ product }: EditProductProps) {
 
     revalidator.revalidate()
 
-    navigate(location.state?.from ?? "/products")
+    navigate("/products")
   }
 
   const addImages = (files: FileList | File[]) => {
@@ -230,7 +229,7 @@ export default function ProductForm({ product }: EditProductProps) {
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon-lg" className="bg-background">
             <Link
-              to={location.state?.from ?? "/products"}
+              to="/products"
               className="flex size-full items-center justify-center"
             >
               <HugeiconsIcon size={14} icon={ArrowLeft02Icon} strokeWidth={2} />
@@ -242,7 +241,7 @@ export default function ProductForm({ product }: EditProductProps) {
         <div className="flex gap-2">
           <Button variant="outline" size="lg" className="bg-background px-0">
             <Link
-              to={location.state?.from ?? "/products"}
+              to="/products"
               className="flex size-full items-center justify-center px-4"
             >
               Discard
